@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -152,9 +153,22 @@ fun loginScreen(){
                 Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     modifier = Modifier
-                        .height(30.dp)
-
+                        .height(40.dp)
+                        .padding(8.dp)
                 ) {
+                    Text(
+                        text = stringResource(id = R.string.dont_have_accont),
+                        fontWeight = FontWeight(500),
+                        color = Color.Gray,
+                        fontSize = 16.sp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(id = R.string.sign_up),
+                        fontWeight = FontWeight(500),
+                        color = Color(206, 6, 240),
+                        fontSize = 16.sp
+                    )
                 }
             }
         }

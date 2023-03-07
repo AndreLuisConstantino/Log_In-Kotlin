@@ -4,5 +4,6 @@
     <string name="sign_to_continue">Please sign in to continue</string>
     <string name="password_outlinedTextfield">Password</string>
     <string name="sign_in_button">SIGN IN</string>
-    <string name="dont_have_accont"></string>
+    <string name="dont_have_accont">Don\'t have an account?</string>
+    <string name="sign_up">Sign Up</string>
 </resources>
