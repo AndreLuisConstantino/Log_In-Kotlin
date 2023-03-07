@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Login - Signup</string>
+    <string name="login_text">Login</string>
+    <string name="sign_to_continue">Please sign in to continue</string>
+    <string name="password_outlinedTextfield">Password</string>
+    <string name="sign_in_button">SIGN IN</string>
+    <string name="dont_have_accont"></string>
+</resources>
