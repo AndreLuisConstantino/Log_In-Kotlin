@@ -98,9 +98,9 @@ fun singUpScreen() {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = "",
+                    value = usernameState.value,
                     onValueChange = {
-
+                        usernameState.value = it
                     },
                     shape = RoundedCornerShape(16.dp),
                     label = { Text(text = stringResource(id = R.string.username_outlinedTextfield)) },
@@ -115,9 +115,9 @@ fun singUpScreen() {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = "",
+                    value = phoneState.value,
                     onValueChange = {
-
+                        phoneState.value = it
                     },
                     shape = RoundedCornerShape(16.dp),
                     label = { Text(text = stringResource(id = R.string.phone_outlinedTextfield)) },
@@ -132,9 +132,9 @@ fun singUpScreen() {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = "",
+                    value = emailState.value,
                     onValueChange = {
-
+                        emailState.value = it
                     },
                     shape = RoundedCornerShape(16.dp),
                     label = { Text(text = stringResource(id = R.string.email_outlinedTextfield)) },
@@ -149,9 +149,9 @@ fun singUpScreen() {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = "",
+                    value = passwordState.value,
                     onValueChange = {
-
+                        passwordState.value = it
                     },
                     shape = RoundedCornerShape(16.dp),
                     label = { Text(text = stringResource(id = R.string.password_outlinedTextfield)) },
