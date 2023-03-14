@@ -3,7 +3,16 @@
     <string name="login_text">Login</string>
     <string name="sign_to_continue">Please sign in to continue</string>
     <string name="password_outlinedTextfield">Password</string>
-    <string name="sign_in_button">SIGN IN</string>
+    <string name="sign_in_button">sign in</string>
     <string name="dont_have_accont">Don\'t have an account?</string>
     <string name="sign_up">Sign Up</string>
+    <string name="create_new_accont">Create a new Account</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="username_outlinedTextfield">Username</string>
+    <string name="phone_outlinedTextfield">Phone</string>
+    <string name="email_outlinedTextfield">Email</string>
+    <string name="over_18">Over 18?</string>
+    <string name="create_accont">Create Account</string>
+    <string name="already_have_accont">Already have an account?</string>
+    <string name="sign_in">Sign in</string>
 </resources>

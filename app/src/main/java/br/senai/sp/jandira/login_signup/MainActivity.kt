@@ -33,7 +33,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LoginSignupTheme {
-                loginScreen()
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    loginScreen()
+                }
             }
         }
     }
@@ -41,9 +43,9 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun loginScreen(){
+fun loginScreen() {
 
-    var emailState = rememberSaveable{
+    var emailState = rememberSaveable {
         mutableStateOf("")
     }
 
@@ -51,126 +53,140 @@ fun loginScreen(){
         mutableStateOf("")
     }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column() {
-            Row(
+
+    Column() {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        )
+        {
+            Surface(
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(40.dp),
+                color = Color(206, 6, 240),
+                shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 16.dp)
+            ) {}
+        }
+        Spacer(
+            modifier = Modifier.height(120.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+
+        ) {
+            Text(
+                text = stringResource(id = R.string.login_text),
+                color = Color(207, 6, 240),
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = stringResource(id = R.string.sign_to_continue),
+                color = Color.Gray,
+                fontSize = 16.sp
+            )
+
+        }
+        Spacer(
+            modifier = Modifier.height(40.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.End
+        ) {
+            OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            )
-            {
-                Surface(
-                    modifier = Modifier
-                        .width(140.dp)
-                        .height(50.dp),
-                    color = Color(206, 6, 240),
-                    shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 16.dp)
-                ) {}
-            }
-            Spacer(
-                modifier = Modifier.height(120.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-
-            ) {
-                Text(
-                    text = stringResource(id = R.string.login_text),
-                    color = Color(206, 6, 240),
-                    fontSize = 70.sp,
-                    fontWeight = FontWeight(700)
-                )
-                Text(
-                    text = stringResource(id = R.string.sign_to_continue),
-                    color = Color.Gray,
-                    fontSize = 20.sp
-                )
-
-            }
-            Spacer(
-                modifier =Modifier.height(40.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.End
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = emailState.value,
-                    onValueChange = {
-                        emailState.value = it
-                    },
-                    shape = RoundedCornerShape(16.dp),
-                    label = {Text(text = "Email")},
-                    leadingIcon = { 
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_email_24),
-                            contentDescription = null,
-                            tint = Color(206, 6, 240)
-                        )
-                    }
-                )
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = passwordState.value,
-                    onValueChange = {
-                        passwordState.value = it
-                    },
-                    shape = RoundedCornerShape(16.dp),
-                    label = {Text(text = stringResource(id = R.string.password_outlinedTextfield))},
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_lock_24),
-                            contentDescription = null,
-                            tint = Color(206, 6, 240)
-                        )
-                    }
-                )
-                Spacer(
-                    modifier = Modifier.height(20.dp)
-                )
-                Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(50.dp),
-                    shape = RoundedCornerShape(18.dp),
-                    colors = ButtonDefaults.buttonColors(Color(206, 6, 240))
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.sign_in_button),
-                        color = Color.White
-                    )
+                value = emailState.value,
+                onValueChange = {
+                    emailState.value = it
+                },
+                shape = RoundedCornerShape(16.dp),
+                label = { Text(text = "Email") },
+                leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.baseline_arrow_forward_24),
+                        painter = painterResource(id = R.drawable.baseline_email_24),
                         contentDescription = null,
-                        tint = Color(255, 255, 255, 255)
+                        tint = Color(206, 6, 240)
                     )
                 }
-                Spacer(modifier = Modifier.height(20.dp))
-                Row(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.dont_have_accont),
-                        fontWeight = FontWeight(500),
-                        color = Color.Gray,
-                        fontSize = 16.sp
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(id = R.string.sign_up),
-                        fontWeight = FontWeight(500),
-                        color = Color(206, 6, 240),
-                        fontSize = 16.sp
+            )
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = passwordState.value,
+                onValueChange = {
+                    passwordState.value = it
+                },
+                shape = RoundedCornerShape(16.dp),
+                label = { Text(text = stringResource(id = R.string.password_outlinedTextfield)) },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_lock_24),
+                        contentDescription = null,
+                        tint = Color(206, 6, 240)
                     )
                 }
+            )
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(50.dp),
+                shape = RoundedCornerShape(18.dp),
+                colors = ButtonDefaults.buttonColors(Color(206, 6, 240))
+            ) {
+                Text(
+                    text = stringResource(id = R.string.sign_in_button).uppercase(),
+                    color = Color.White
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_arrow_forward_24),
+                    contentDescription = null,
+                    tint = Color(255, 255, 255, 255)
+                )
             }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier
+                    .height(40.dp)
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.dont_have_accont),
+                    fontWeight = FontWeight(500),
+                    color = Color.Gray,
+                    fontSize = 12.sp
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(id = R.string.sign_up),
+                    fontWeight = FontWeight.Bold,
+                    color = Color(206, 6, 240),
+                    fontSize = 12.sp
+                )
+            }
+
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 120.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Surface(
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(40.dp),
+                color = Color(206, 6, 240),
+                shape = RoundedCornerShape(0.dp, 16.dp, 0.dp, 0.dp)
+            ) {}
         }
     }
 }
