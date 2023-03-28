@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.login_signup.components.BottomShape
+import br.senai.sp.jandira.login_signup.components.TopShape
 import br.senai.sp.jandira.login_signup.ui.theme.LoginSignupTheme
 
 class MainActivity : ComponentActivity() {
@@ -60,13 +62,7 @@ fun loginScreen() {
             horizontalArrangement = Arrangement.End
         )
         {
-            Surface(
-                modifier = Modifier
-                    .width(120.dp)
-                    .height(40.dp),
-                color = Color(206, 6, 240),
-                shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 16.dp)
-            ) {}
+            TopShape()
         }
         Spacer(
             modifier = Modifier.height(120.dp)
@@ -180,13 +176,7 @@ fun loginScreen() {
                 .padding(top = 120.dp),
             horizontalArrangement = Arrangement.Start
         ) {
-            Surface(
-                modifier = Modifier
-                    .width(120.dp)
-                    .height(40.dp),
-                color = Color(206, 6, 240),
-                shape = RoundedCornerShape(0.dp, 16.dp, 0.dp, 0.dp)
-            ) {}
+            BottomShape()
         }
     }
 }

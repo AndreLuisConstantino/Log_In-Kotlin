@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -46,7 +47,6 @@ fun homeScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(206.dp),
-            Alignment.TopEnd
         ){
             Image(
                 painter = painterResource(id = R.drawable.image_paris),
@@ -54,19 +54,25 @@ fun homeScreen() {
                 modifier = Modifier
                     .fillMaxSize()
             )
-            Image(
-                painter = painterResource(id = R.drawable.susanna_profile),
-                contentDescription = "",
+            Column(
                 modifier = Modifier
-                    .size(61.dp)
-                    .clip(shape = CircleShape)
-                    .border(
-                        width = 2.dp,
-                        shape = CircleShape,
-                        color = Color(255, 255, 255, 255)
-                    )
-
-            )
+                    .fillMaxWidth()
+                    .padding(13.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.susanna_profile),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(61.dp)
+                        .clip(shape = RoundedCornerShape(50.dp))
+                        .border(
+                            width = 2.dp,
+                            shape = CircleShape,
+                            color = Color(255, 255, 255, 255)
+                        )
+                )
+            }
         }
     }
 }

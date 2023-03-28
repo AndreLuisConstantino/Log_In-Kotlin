@@ -3,15 +3,24 @@ package br.senai.sp.jandira.login_signup
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -19,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.login_signup.components.BottomShape
+import br.senai.sp.jandira.login_signup.components.TopShape
 import br.senai.sp.jandira.login_signup.ui.theme.LoginSignupTheme
 
 class SignUpActivity : ComponentActivity() {
@@ -63,13 +74,7 @@ fun singUpScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
-            Card(
-                modifier = Modifier
-                    .width(120.dp)
-                    .height(50.dp),
-                backgroundColor = Color(206, 6, 240),
-                shape = RoundedCornerShape(bottomStart = 16.dp)
-            ) {}
+            TopShape()
         }
         Column(
             modifier = Modifier
@@ -84,12 +89,50 @@ fun singUpScreen() {
                 color = Color(206, 6, 240)
             )
             Text(
-                text = stringResource(id = R.string.dont_have_accont),
+                text = stringResource(id = R.string.create_new_accont),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Gray
             )
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(40.dp))
+            Box(
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                Card(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .align(alignment = Alignment.Center)
+                        .border(
+                            width = 2.dp,
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Magenta,
+                                    Color.White
+                                )
+                            ),
+                            shape = CircleShape
+                        ),
+                    shape = CircleShape
+
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.user),
+                        contentDescription = null,
+                        modifier = Modifier.size(50.dp)
+                    )
+                }
+                Image(
+                    painter = painterResource(id = R.drawable.photo_camera), contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .size(42.dp)
+                        .offset(
+                            x = 12.dp,
+                            y = 7.dp
+                        )
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -216,13 +259,7 @@ fun singUpScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
             ) {
-                Card(
-                    modifier = Modifier
-                        .width(120.dp)
-                        .height(50.dp),
-                    backgroundColor = Color(206, 6, 240),
-                    shape = RoundedCornerShape(topEnd = 16.dp)
-                ) {}
+                BottomShape()
             }
         }
     }
