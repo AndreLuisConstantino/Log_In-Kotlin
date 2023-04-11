@@ -1,14 +1,17 @@
 package br.senai.sp.jandira.login_signup
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -22,14 +25,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.login_signup.components.BottomShape
 import br.senai.sp.jandira.login_signup.components.TopShape
+import br.senai.sp.jandira.login_signup.model.User
+import br.senai.sp.jandira.login_signup.repository.UserRepository
 import br.senai.sp.jandira.login_signup.ui.theme.LoginSignupTheme
 
 class SignUpActivity : ComponentActivity() {
@@ -67,6 +76,12 @@ fun singUpScreen() {
         mutableStateOf("")
     }
 
+    var over18State = rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var context = LocalContext.current
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -78,8 +93,10 @@ fun singUpScreen() {
         }
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+                .fillMaxSize()
+                .padding(12.dp)
+                .verticalScroll(rememberScrollState())
+                .weight(weight = 1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -122,7 +139,8 @@ fun singUpScreen() {
                     )
                 }
                 Image(
-                    painter = painterResource(id = R.drawable.photo_camera), contentDescription = null,
+                    painter = painterResource(id = R.drawable.photo_camera),
+                    contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .size(42.dp)
@@ -163,6 +181,7 @@ fun singUpScreen() {
                         phoneState.value = it
                     },
                     shape = RoundedCornerShape(16.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     label = { Text(text = stringResource(id = R.string.phone_outlinedTextfield)) },
                     leadingIcon = {
                         Icon(
@@ -180,6 +199,7 @@ fun singUpScreen() {
                         emailState.value = it
                     },
                     shape = RoundedCornerShape(16.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     label = { Text(text = stringResource(id = R.string.email_outlinedTextfield)) },
                     leadingIcon = {
                         Icon(
@@ -197,6 +217,7 @@ fun singUpScreen() {
                         passwordState.value = it
                     },
                     shape = RoundedCornerShape(16.dp),
+                    visualTransformation = PasswordVisualTransformation(),
                     label = { Text(text = stringResource(id = R.string.password_outlinedTextfield)) },
                     leadingIcon = {
                         Icon(
@@ -213,12 +234,22 @@ fun singUpScreen() {
                 ) {
                     Checkbox(
                         checked = false,
-                        onCheckedChange = null)
+                        onCheckedChange = null
+                    )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(text = stringResource(id = R.string.over_18))
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        userSave(
+                            context = context,
+                            email = emailState.toString(),
+                            userName = usernameState.toString(),
+                            phone = phoneState.toString(),
+                            password = passwordState.toString(),
+                            isOver = over18State.value
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -254,12 +285,45 @@ fun singUpScreen() {
                 }
             }
 
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-            ) {
-                BottomShape()
-            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            BottomShape()
         }
     }
+}
+
+fun userSave(
+    context: Context,
+    email: String,
+    userName: String,
+    phone: String,
+    password: String,
+    isOver: Boolean
+) {
+    val userRepository = UserRepository(context)
+
+    //Recuperando no bando um usuário wue tenha o email informado
+    var findUserByEmail = userRepository.findUserByEmail(email)
+
+    //Se user for diferente de nulo, gravamos o usuario, senão, avisamos que o usuário e já existe
+    if(findUserByEmail == null){
+        val newUser = User(
+            userName = userName,
+            phone = phone,
+            email = email,
+            password = password,
+            isOver18 = isOver
+        )
+        val id = userRepository.save(newUser)
+        Toast.makeText(
+            context,
+            "User created #$id ",
+            Toast.LENGTH_LONG
+        ).show()
+    } else {
+        Toast.makeText(context, "User already exists!!!", Toast.LENGTH_LONG).show()
+    }
+}

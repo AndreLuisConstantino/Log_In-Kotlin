@@ -22,7 +22,7 @@ fun TopShape() {
         //backgroundColor = Brush.horizontalGradient(listOf(Color.Magenta, Color.Yellow)),
         shape = RoundedCornerShape(bottomStart = 16.dp)
     ) {
-        //Box(modifier = Modifier.background(brush = Brush.horizontalGradient(listOf(Color.Magenta, Color.Yellow))))
+        Box(modifier = Modifier.background(color = Color(206, 6, 240)))
     }
 }
 
