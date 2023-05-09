@@ -1,18 +1,26 @@
 package br.senai.sp.jandira.login_signup
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Space
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.materialIcon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,14 +28,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.login_signup.components.BottomShape
 import br.senai.sp.jandira.login_signup.components.TopShape
+import br.senai.sp.jandira.login_signup.dao.UserDao
+import br.senai.sp.jandira.login_signup.repository.UserRepository
 import br.senai.sp.jandira.login_signup.ui.theme.LoginSignupTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,14 +60,19 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun loginScreen() {
 
-    var emailState = rememberSaveable {
+    val context = LocalContext.current
+
+    var emailState by remember {
         mutableStateOf("")
     }
 
-    var passwordState = rememberSaveable {
+    var passwordState by remember {
         mutableStateOf("")
     }
-
+    
+    var passwordVisibilityState by remember {
+        mutableStateOf(false)
+    }
 
     Column() {
         Row(
@@ -97,9 +115,9 @@ fun loginScreen() {
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = emailState.value,
+                value = emailState,
                 onValueChange = {
-                    emailState.value = it
+                    emailState = it
                 },
                 shape = RoundedCornerShape(16.dp),
                 label = { Text(text = "Email") },
@@ -113,11 +131,12 @@ fun loginScreen() {
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = passwordState.value,
+                value = passwordState,
                 onValueChange = {
-                    passwordState.value = it
+                    passwordState = it
                 },
                 shape = RoundedCornerShape(16.dp),
+                visualTransformation = if(!passwordVisibilityState) PasswordVisualTransformation() else VisualTransformation.None,
                 label = { Text(text = stringResource(id = R.string.password_outlinedTextfield)) },
                 leadingIcon = {
                     Icon(
@@ -125,13 +144,27 @@ fun loginScreen() {
                         contentDescription = null,
                         tint = Color(206, 6, 240)
                     )
+                },
+                trailingIcon = {
+                    IconButton(onClick = {
+                            passwordVisibilityState = !passwordVisibilityState
+                    }) {
+                        Icon(
+                            imageVector = if(passwordVisibilityState)
+                                                Icons.Default.VisibilityOff
+                                            else Icons.Default.Visibility,
+                            contentDescription = null
+                        )
+                    }
                 }
             )
             Spacer(
                 modifier = Modifier.height(20.dp)
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    authenticate(emailState, passwordState, context)
+                },
                 modifier = Modifier
                     .width(150.dp)
                     .height(50.dp),
@@ -151,8 +184,9 @@ fun loginScreen() {
             Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier
-                    .height(40.dp)
-                    .padding(8.dp)
+                    .height(40.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = stringResource(id = R.string.dont_have_accont),
@@ -161,12 +195,18 @@ fun loginScreen() {
                     fontSize = 12.sp
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(id = R.string.sign_up),
-                    fontWeight = FontWeight.Bold,
-                    color = Color(206, 6, 240),
-                    fontSize = 12.sp
-                )
+                TextButton(
+                    onClick = {
+                        var openSignUp = Intent(context, SignUpActivity::class.java)
+                        context.startActivity(openSignUp)
+                    }) {
+                    Text(
+                        text = stringResource(id = R.string.sign_up),
+                        fontWeight = FontWeight.Bold,
+                        color = Color(206, 6, 240),
+                        fontSize = 12.sp
+                    )
+                }
             }
 
         }
@@ -178,5 +218,20 @@ fun loginScreen() {
         ) {
             BottomShape()
         }
+    }
+}
+
+fun authenticate(email: String, password: String, context: Context) {
+    val userRepository = UserRepository(context)
+    val user = userRepository.authenticate(
+        email,
+        password
+    )
+
+    if (user != null){
+        val openHome = Intent(context, Home::class.java)
+        context.startActivity(openHome)
+    } else {
+
     }
 }

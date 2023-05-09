@@ -1,11 +1,14 @@
 package br.senai.sp.jandira.login_signup
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
@@ -17,14 +20,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +42,8 @@ import br.senai.sp.jandira.login_signup.components.TopShape
 import br.senai.sp.jandira.login_signup.model.User
 import br.senai.sp.jandira.login_signup.repository.UserRepository
 import br.senai.sp.jandira.login_signup.ui.theme.LoginSignupTheme
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
 class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,25 +64,39 @@ class SignUpActivity : ComponentActivity() {
 @Composable
 fun singUpScreen() {
 
-    var emailState = rememberSaveable {
+    var emailState = rememberSaveable() {
         mutableStateOf("")
     }
 
-    var passwordState = rememberSaveable {
+    var passwordState = rememberSaveable() {
         mutableStateOf("")
     }
 
-    var phoneState = rememberSaveable {
+    var phoneState = rememberSaveable() {
         mutableStateOf("")
     }
 
-    var usernameState = rememberSaveable {
+    var usernameState = rememberSaveable() {
         mutableStateOf("")
     }
 
-    var over18State = rememberSaveable {
+    var over18State = rememberSaveable() {
         mutableStateOf(false)
     }
+
+    //OBTER FOTO DA GALERIA DE FOTOS
+    var photUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+    //CRIAR O OBJETO QUE ABRIRÁ A GALERIA E RETORNARÁ A URI DA IMAGEM SELECIONADA
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
+        photUri = it
+    }
+
+    var painter = rememberAsyncImagePainter(
+        ImageRequest.Builder(LocalContext.current).data(photUri).build()
+    )
 
     var context = LocalContext.current
 
@@ -133,9 +151,10 @@ fun singUpScreen() {
 
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.user),
+                        painter = painter,
                         contentDescription = null,
-                        modifier = Modifier.size(50.dp)
+                        modifier = Modifier.size(50.dp),
+                        contentScale = ContentScale.Crop
                     )
                 }
                 Image(
@@ -148,6 +167,10 @@ fun singUpScreen() {
                             x = 12.dp,
                             y = 7.dp
                         )
+                        .clickable {
+                            launcher.launch("image/*")
+
+                        }
                 )
             }
             Spacer(modifier = Modifier.height(40.dp))
